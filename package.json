@@ -5,7 +5,7 @@
   "main": "orderTotal.js",
   "scripts": {
     "test": "jest --verbose ./testingPractice",
-    "watch": "jest --watch testingPractice capitalize.js"
+    "watch": "jest --watch testingPractice caesarCipher.js"
   },
   "keywords": [],
   "author": "",
