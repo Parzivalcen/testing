@@ -1,3 +1,5 @@
+import analizeArray from './analizeArray';
+
 test('Analize', ()=>{
   expect(analizeArray([1, 2, 3, 4, 5])).toEqual({
     average: 3,
@@ -13,3 +15,4 @@ test('Analize (2)', ()=>{
     max: 8,
     length: 6})
 })
+
