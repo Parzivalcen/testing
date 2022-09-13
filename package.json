@@ -5,7 +5,7 @@
   "main": "orderTotal.js",
   "scripts": {
     "test": "jest --verbose ./testingPractice",
-    "watch": "jest --watch testingPractice analizeArray.js"
+    "watch": "jest --watch orderTotal.test.js"
   },
   "keywords": [],
   "author": "",
