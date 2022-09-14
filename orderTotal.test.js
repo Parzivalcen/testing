@@ -1,28 +1,38 @@
 
 const orderTotal = require('./orderTotal')
-const emptyFunction = () => {};
 
 
 // TESTS //
 it('Calls API correctly', ()=> {
-  let isFakeFetchCalled = false;
-  const fakeFetch = (url) => {
-    expect(url).toBe('https://vatapi.com/v1/country-code-check?code=DE')
-    isFakeFetchCalled = true;
+  const fakeProcess = {
+    env:{
+      VAT_API_KEY: 'apiKey123'
+    }
   }
-  orderTotal(fakeFetch, {
+  const fakeFetch = (url, opts) => {
+    expect(opts.headers.apikey).toBe('apiKey123');
+    expect(url).toBe('https://vatapi.com/v1/country-code-check?code=DE');
+    return Promise.resolve({
+      json: () => Promise.resolve({
+        rates:{
+          standard:{
+            value: 19
+          }
+        }
+      })
+    });
+  }
+  return orderTotal(fakeFetch, fakeProcess, {
     country: 'DE',
     items: [
       {name: 'Dragon Food', price: 8, quantity: 2},
     ]
-  }).then(result => {
-    expect(isFakeFetchCalled).toBe(true);
-  });
+  }).then(result => expect(result).toBe(8 * 2 * 1.19));
 });
 
 
 it('No Quantity', ()=>
-  orderTotal(emptyFunction,{
+  orderTotal(null, null, {
     items: [
       {name: 'Dog Food', price: 8},
     ]
@@ -31,7 +41,7 @@ it('No Quantity', ()=>
 
 
   it('Quantity', ()=>
-  orderTotal(emptyFunction,{
+  orderTotal(null, null, {
     items: [
       {name: 'Dog Food', price: 8, quantity: 2},
     ]
@@ -39,7 +49,7 @@ it('No Quantity', ()=>
 
 
   it('Happy path (1)', ()=>
-    orderTotal(emptyFunction,{
+    orderTotal(null, null, {
       items: [
         {name: 'Dog Food', price: 8, quantity: 2},
         {name: 'Dog sword', price: 800, quantity: 1}
@@ -48,7 +58,7 @@ it('No Quantity', ()=>
 
 
 it('Happy path (2)', ()=>
-  orderTotal(emptyFunction,{
+  orderTotal(null, null, {
     items: [
       {name: 'Dog toy', price: 5, quantity: 2},
       {name: 'Dog pourer', price: 80, quantity: 1}
@@ -56,7 +66,7 @@ it('Happy path (2)', ()=>
   }).then(result=>expect(result).toBe(90)));
 
 it('Happy path (3)', ()=>
-  orderTotal(emptyFunction,{
+  orderTotal(null, null, {
     items: [
       {name: 'Dog toy', price: 5, quantity: 3},
       {name: 'Dog pourer', price: 80, quantity: 2}
