@@ -1,4 +1,6 @@
 function orderTotal(fetch, process, order){
+  const orderSum = (order) => order.items.reduce((prev, curr)=>
+  curr.price * (curr.quantity || 1)+ prev, 0)
   if(order.country){
     return fetch('https://vatapi.com/v1/country-code-check?code=' + order.country, {
       headers: {
@@ -7,12 +9,10 @@ function orderTotal(fetch, process, order){
     })
     .then(response => response.json())
     .then(data => data.rates.standard.value)
-    .then(vat => order.items.reduce((prev, curr)=>
-    curr.price * (curr.quantity || 1)+ prev, 0) * (1+vat/100));
+    .then(vat => orderSum(order) * (1+vat/100));
   }
 
-  return Promise.resolve( order.items.reduce((prev, curr)=>
-    curr.price * (curr.quantity || 1)+ prev, 0));    
+  return Promise.resolve(orderSum(order) );    
 }
 
 module.exports = orderTotal;
