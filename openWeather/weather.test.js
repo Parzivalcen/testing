@@ -12,6 +12,6 @@ test ('API', () =>{
   }))
   return skyState(fakeFetch, fakeProcess)
   .then(result => {
-    expect(fakeFetch).toBeCalledWith('https://api.openweathermap.org/data/2.5/weather?q=asuncion&appid=', fakeProcess.env.API_KEY)
-    expect(result).toBe('Sky clear')});
+    expect(fakeFetch).toBeCalledWith(`https://api.openweathermap.org/data/2.5/weather?q=asuncion&appid=${fakeProcess.env.API_KEY}`)
+    expect(result).toBe('Sky state: clear')});
 })
